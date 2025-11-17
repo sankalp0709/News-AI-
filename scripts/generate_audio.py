@@ -4,6 +4,7 @@ import glob
 import json
 import datetime as dt
 import wave
+import argparse
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from tts.vaani_client import synthesize as vaani_synth
 from tts.fallback import simplify_text, synthesize_local
@@ -11,9 +12,11 @@ from tts.fallback import simplify_text, synthesize_local
 def ensure_dir(p):
     os.makedirs(p, exist_ok=True)
 
-def today_dir(base):
+def today_dir(base, sub=None):
     d = dt.datetime.utcnow().strftime("%Y%m%d")
     p = os.path.join(base, d)
+    if sub:
+        p = os.path.join(p, sub)
     ensure_dir(p)
     return p
 
@@ -42,29 +45,36 @@ def synthesize_text(text, voice, tone, lang, out_path):
     return ok, status
 
 def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--voice", default="default")
+    ap.add_argument("--avatar", default="default")
+    ap.add_argument("--limit", type=int, default=10)
+    args = ap.parse_args()
+
     proc_dir = today_dir(os.path.join("data","processed"))
-    audio_dir = today_dir(os.path.join("data","audio"))
+    audio_dir = today_dir(os.path.join("data","audio"), args.avatar)
     files = sorted(glob.glob(os.path.join(proc_dir, "item_*.json")))
     count = 0
     for f in files:
         with open(f, "r", encoding="utf-8") as fd:
             obj = json.load(fd)
         text = obj.get("summary_medium") or obj.get("summary_short") or obj.get("title")
-        voice = "default"
+        voice = args.voice
         tone = obj.get("tone") or "calm"
         lang = obj.get("language") or "en"
         base = os.path.splitext(os.path.basename(f))[0]
-        out_path = os.path.join(audio_dir, f"{base}.wav")
+        out_path = os.path.join(audio_dir, f"{base}_{args.avatar}.wav")
         ok, status = synthesize_text(text, voice, tone, lang, out_path)
         dur = audio_duration(out_path) if ok else None
         obj["audio_path"] = out_path if ok else None
         obj["audio_duration"] = dur
         obj["voice_used"] = voice
         obj["synthesis_status"] = status
+        obj["avatar"] = args.avatar
         with open(f, "w", encoding="utf-8") as fo:
             json.dump(obj, fo, ensure_ascii=False, indent=2)
         count += 1
-        if count >= 10:
+        if count >= args.limit:
             break
     print(json.dumps({"audio_generated": count, "audio_dir": audio_dir}))
 
