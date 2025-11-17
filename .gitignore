@@ -7,8 +7,11 @@ venv/
 *.orig
 *.log
 data/raw/*
+!data/raw/.gitkeep
 data/processed/*
+!data/processed/.gitkeep
 data/audio/*
 logs/*
+!logs/.gitkeep
 .DS_Store
 Thumbs.db
