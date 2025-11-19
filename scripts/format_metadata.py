@@ -31,8 +31,6 @@ def pick_category(title):
     return "general"
 
 def parse_time(s):
-    if not s:
-        return dt.datetime.utcnow().isoformat()
     try:
         return dparser.parse(s).isoformat()
     except Exception:
@@ -62,8 +60,32 @@ def process_item(it):
     return out
 
 def validate(obj):
-    ks = ["id","title","summary_short","summary_medium","category","language","polarity","tone","timestamp"]
-    return all(k in obj and obj.get(k) is not None for k in ks)
+    cats = {"general","technology","business","sports","politics"}
+    pols = {"positive","neutral","negative"}
+    tones = {"calm","urgent","joyful"}
+    def ok_str(x, n=1):
+        return isinstance(x, str) and len(x.strip()) >= n
+    if not ok_str(obj.get("id"), 1):
+        return False
+    if not ok_str(obj.get("title"), 3):
+        return False
+    if not ok_str(obj.get("summary_short"), 5):
+        return False
+    if not ok_str(obj.get("summary_medium"), 5):
+        return False
+    if obj.get("category") not in cats:
+        return False
+    if not ok_str(obj.get("language"), 2):
+        return False
+    if obj.get("polarity") not in pols:
+        return False
+    if obj.get("tone") not in tones:
+        return False
+    try:
+        _ = dparser.parse(obj.get("timestamp"))
+    except Exception:
+        return False
+    return True
 
 def main():
     raw_dir = today_dir(os.path.join("data","raw"))
