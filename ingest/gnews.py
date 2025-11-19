@@ -7,7 +7,8 @@ def fetch_gnews(query, lang="en", max_results=10):
         return []
     url = "https://gnews.io/api/v4/search"
     params = {"q": query, "lang": lang, "max": max_results, "token": token}
-    r = requests.get(url, params=params, timeout=15)
+    to = float(os.environ.get("HTTP_TIMEOUT_SECONDS", "20"))
+    r = requests.get(url, params=params, timeout=to)
     r.raise_for_status()
     data = r.json()
     return data.get("articles", [])

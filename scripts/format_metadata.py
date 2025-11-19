@@ -93,18 +93,24 @@ def main():
     files = sorted(glob.glob(os.path.join(raw_dir, "*.json")))
     items = []
     for f in files:
-        with open(f, "r", encoding="utf-8") as fd:
-            data = json.load(fd)
-            for x in data.get("items", []):
-                items.append(x)
+        try:
+            with open(f, "r", encoding="utf-8") as fd:
+                data = json.load(fd)
+        except Exception:
+            continue
+        for x in (data.get("items", []) or []):
+            items.append(x)
     count = 0
     for i, it in enumerate(items):
         obj = process_item(it)
         if validate(obj):
             path = os.path.join(out_dir, f"item_{i+1}.json")
-            with open(path, "w", encoding="utf-8") as fo:
-                json.dump(obj, fo, ensure_ascii=False, indent=2)
-            count += 1
+            try:
+                with open(path, "w", encoding="utf-8") as fo:
+                    json.dump(obj, fo, ensure_ascii=False, indent=2)
+                count += 1
+            except Exception:
+                continue
         if count >= 10:
             break
     print(json.dumps({"processed": count, "output_dir": out_dir}))

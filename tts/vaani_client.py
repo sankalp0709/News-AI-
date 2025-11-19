@@ -12,9 +12,10 @@ def synthesize(text, voice="default", tone="calm", lang="en", out_path=None):
     urls = [base]
     if base.rstrip("/").endswith("/api/v1"):
         urls = [base.rstrip("/") + "/tts", base]
+    to = float(os.environ.get("HTTP_TIMEOUT_SECONDS", "20"))
     for url in urls:
         try:
-            r = requests.post(url, json=payload, headers=headers, timeout=30)
+            r = requests.post(url, json=payload, headers=headers, timeout=to)
             if r.status_code >= 400:
                 continue
             ct = r.headers.get("Content-Type", "")
@@ -34,7 +35,7 @@ def synthesize(text, voice="default", tone="calm", lang="en", out_path=None):
                         return out_path
                     return b
                 if data.get("audio_url"):
-                    ar = requests.get(data.get("audio_url"), timeout=30)
+                    ar = requests.get(data.get("audio_url"), timeout=to)
                     if ar.status_code >= 400:
                         continue
                     if out_path:

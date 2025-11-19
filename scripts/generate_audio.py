@@ -12,8 +12,8 @@ from tts.fallback import simplify_text, synthesize_local
 def ensure_dir(p):
     os.makedirs(p, exist_ok=True)
 
-def today_dir(base, sub=None):
-    d = dt.datetime.utcnow().strftime("%Y%m%d")
+def today_dir(base, sub=None, date_override=None):
+    d = date_override or dt.datetime.utcnow().strftime("%Y%m%d")
     p = os.path.join(base, d)
     if sub:
         p = os.path.join(p, sub)
@@ -28,6 +28,11 @@ def audio_duration(path):
             return round(frames / float(rate), 2)
     except Exception:
         return None
+
+def normalize_path(p):
+    if not p:
+        return p
+    return str(p).replace("\\", "/")
 
 def synthesize_text(text, voice, tone, lang, out_path):
     ok = False
@@ -49,10 +54,11 @@ def main():
     ap.add_argument("--voice", default="default")
     ap.add_argument("--avatar", default="default")
     ap.add_argument("--limit", type=int, default=10)
+    ap.add_argument("--date", default=None, help="YYYYMMDD processed/audio date override")
     args = ap.parse_args()
 
-    proc_dir = today_dir(os.path.join("data","processed"))
-    audio_dir = today_dir(os.path.join("data","audio"), args.avatar)
+    proc_dir = today_dir(os.path.join("data","processed"), date_override=args.date)
+    audio_dir = today_dir(os.path.join("data","audio"), args.avatar, date_override=args.date)
     files = sorted(glob.glob(os.path.join(proc_dir, "item_*.json")))
     count = 0
     for f in files:
@@ -66,7 +72,7 @@ def main():
         out_path = os.path.join(audio_dir, f"{base}_{args.avatar}.wav")
         ok, status = synthesize_text(text, voice, tone, lang, out_path)
         dur = audio_duration(out_path) if ok else None
-        obj["audio_path"] = out_path if ok else None
+        obj["audio_path"] = normalize_path(out_path) if ok else None
         obj["audio_duration"] = dur
         obj["voice_used"] = voice
         obj["synthesis_status"] = status

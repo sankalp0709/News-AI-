@@ -5,8 +5,11 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 def main():
     path = os.path.join("exports","weekly_report.json")
-    with open(path, "r", encoding="utf-8") as f:
-        data = json.load(f)
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        data = {"items": []}
     items = data.get("items", [])[:9]
     out = []
     def normalize_path(p):
@@ -25,8 +28,11 @@ def main():
         }
         out.append(y)
     outp = os.path.join("exports","sample_integration.json")
-    with open(outp, "w", encoding="utf-8") as fo:
-        json.dump({"items": out}, fo, ensure_ascii=False, indent=2)
+    try:
+        with open(outp, "w", encoding="utf-8") as fo:
+            json.dump({"items": out}, fo, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
     print(json.dumps({"written": outp, "count": len(out)}))
 
 if __name__ == "__main__":

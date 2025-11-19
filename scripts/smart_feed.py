@@ -72,29 +72,35 @@ def export_weekly(feed):
     ensure_dir(out_dir)
     csv_path = os.path.join(out_dir, "weekly_report.csv")
     json_path = os.path.join(out_dir, "weekly_report.json")
-    with open(csv_path, "w", encoding="utf-8") as fc:
-        fc.write("id,title,category,language,polarity,tone,trend_score,priority_score,timestamp\n")
-        for x in feed:
-            row = [
-                str(x.get("id","")).replace(","," "),
-                str(x.get("title","")).replace(","," "),
-                x.get("category",""),
-                x.get("language",""),
-                x.get("polarity",""),
-                x.get("tone",""),
-                str(x.get("trend_score","")),
-                str(x.get("priority_score","")),
-                x.get("timestamp","")
-            ]
-            fc.write(",".join(row)+"\n")
+    try:
+        with open(csv_path, "w", encoding="utf-8") as fc:
+            fc.write("id,title,category,language,polarity,tone,trend_score,priority_score,timestamp\n")
+            for x in feed:
+                row = [
+                    str(x.get("id","")).replace(","," "),
+                    str(x.get("title","")).replace(","," "),
+                    x.get("category",""),
+                    x.get("language",""),
+                    x.get("polarity",""),
+                    x.get("tone",""),
+                    str(x.get("trend_score","")),
+                    str(x.get("priority_score","")),
+                    x.get("timestamp","")
+                ]
+                fc.write(",".join(row)+"\n")
+    except Exception:
+        pass
     sanitized = []
     for x in feed:
         y = dict(x)
         if y.get("audio_path"):
             y["audio_path"] = normalize_path(y.get("audio_path"))
         sanitized.append(y)
-    with open(json_path, "w", encoding="utf-8") as fj:
-        json.dump({"generated_at": dt.datetime.utcnow().isoformat(), "items": sanitized}, fj, ensure_ascii=False, indent=2)
+    try:
+        with open(json_path, "w", encoding="utf-8") as fj:
+            json.dump({"generated_at": dt.datetime.utcnow().isoformat(), "items": sanitized}, fj, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
     return csv_path, json_path
 
 def main():
@@ -105,8 +111,11 @@ def main():
     files = sorted(glob.glob(os.path.join(pdir, "item_*.json")))
     items = []
     for f in files:
-        with open(f, "r", encoding="utf-8") as fd:
-            items.append(json.load(fd))
+        try:
+            with open(f, "r", encoding="utf-8") as fd:
+                items.append(json.load(fd))
+        except Exception:
+            continue
     feed = rank(items)
     cats = {}
     for x in feed:

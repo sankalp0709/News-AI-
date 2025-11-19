@@ -16,14 +16,15 @@ def _fallback_medium(text):
     return " ".join(s[:4])[:800]
 
 def _uniguru(text):
-    url = os.environ.get("UNIGURU_SUMMARY_URL")
-    key = os.environ.get("UNIGURU_API_KEY")
+    url = os.environ.get("https://complete-uniguru.onrender.com")
+    key = os.environ.get("uniguru-dev-key-2025")
     if not url:
         return None
     try:
+        to = float(os.environ.get("HTTP_TIMEOUT_SECONDS", "20"))
         headers = {"Authorization": f"Bearer {key}"} if key else {}
         payload = {"text": text}
-        r = requests.post(url, json=payload, headers=headers, timeout=20)
+        r = requests.post(url, json=payload, headers=headers, timeout=to)
         r.raise_for_status()
         return r.json()
     except Exception:
