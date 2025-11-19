@@ -4,6 +4,7 @@ import glob
 import json
 import math
 import datetime as dt
+import argparse
 from dateutil import parser as dparser
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from agents.trend import compute as compute_trend
@@ -11,8 +12,8 @@ from agents.trend import compute as compute_trend
 def ensure_dir(p):
     os.makedirs(p, exist_ok=True)
 
-def today_dir(base):
-    d = dt.datetime.utcnow().strftime("%Y%m%d")
+def today_dir(base, date_override=None):
+    d = date_override or dt.datetime.utcnow().strftime("%Y%m%d")
     p = os.path.join(base, d)
     ensure_dir(p)
     return p
@@ -30,6 +31,11 @@ def recency_score(ts):
     now = dt.datetime.utcnow()
     dh = max(0.0, (now - _ts(ts)).total_seconds()/3600.0)
     return max(0.0, min(1.0, max(0.0, 1.0 - dh/48.0)))
+
+def normalize_path(p):
+    if not p:
+        return p
+    return str(p).replace("\\", "/")
 
 def polarity_weight(p):
     if p == "positive":
@@ -55,6 +61,8 @@ def rank(items):
         y = dict(x)
         y["trend_score"] = round(tscores.get(x.get("category") or "general", 0.0), 4)
         y["priority_score"] = s
+        if y.get("audio_path"):
+            y["audio_path"] = normalize_path(y.get("audio_path"))
         ranked.append(y)
     ranked.sort(key=lambda z: z["priority_score"], reverse=True)
     return ranked
@@ -79,12 +87,21 @@ def export_weekly(feed):
                 x.get("timestamp","")
             ]
             fc.write(",".join(row)+"\n")
+    sanitized = []
+    for x in feed:
+        y = dict(x)
+        if y.get("audio_path"):
+            y["audio_path"] = normalize_path(y.get("audio_path"))
+        sanitized.append(y)
     with open(json_path, "w", encoding="utf-8") as fj:
-        json.dump({"generated_at": dt.datetime.utcnow().isoformat(), "items": feed}, fj, ensure_ascii=False, indent=2)
+        json.dump({"generated_at": dt.datetime.utcnow().isoformat(), "items": sanitized}, fj, ensure_ascii=False, indent=2)
     return csv_path, json_path
 
 def main():
-    pdir = today_dir(os.path.join("data","processed"))
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--date", help="YYYYMMDD date to read from", default=None)
+    args = ap.parse_args()
+    pdir = today_dir(os.path.join("data","processed"), args.date)
     files = sorted(glob.glob(os.path.join(pdir, "item_*.json")))
     items = []
     for f in files:

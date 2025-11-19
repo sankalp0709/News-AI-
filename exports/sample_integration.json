@@ -5,8 +5,8 @@
       "script": "Ecuador votes against allowing foreign military bases in country. Voters have rejected a referendum proposal, dealing a blow to President Daniel Noboa and US ambitions in the region.",
       "tone": "joyful",
       "language": "en",
-      "audio_path": "data\\audio\\20251117\\dev\\item_6_dev.wav",
-      "priority_score": 0.8777,
+      "audio_path": "data/audio/20251117/dev/item_6_dev.wav",
+      "priority_score": 0.7,
       "trend_score": 1.0
     },
     {
@@ -14,8 +14,8 @@
       "script": "Thousands protest against government in Mexico as clashes leave 120 injured. The protests came weeks after Carlos Manzo, mayor of Uruapan, was killed.",
       "tone": "joyful",
       "language": "en",
-      "audio_path": "data\\audio\\20251117\\dev\\item_8_dev.wav",
-      "priority_score": 0.7788,
+      "audio_path": "data/audio/20251117/dev/item_8_dev.wav",
+      "priority_score": 0.7,
       "trend_score": 1.0
     },
     {
@@ -23,8 +23,8 @@
       "script": "Brazil's Amazon rainforest at risk as key protection under threat. Brazilian farmers want to end a ban on planting soya on cleared land, which critics say would spur deforestation.",
       "tone": "calm",
       "language": "en",
-      "audio_path": "data\\audio\\20251117\\dev\\item_5_dev.wav",
-      "priority_score": 0.7502,
+      "audio_path": "data/audio/20251117/dev/item_5_dev.wav",
+      "priority_score": 0.58,
       "trend_score": 1.0
     },
     {
@@ -32,8 +32,8 @@
       "script": "Jurors in high-profile Australian trial visit beach where murder victim found. Rajwinder Singh denies stabbing the 24-year-old to death in October 2019.",
       "tone": "joyful",
       "language": "en",
-      "audio_path": "data\\audio\\20251117\\dev\\item_3_dev.wav",
-      "priority_score": 0.5094,
+      "audio_path": "data/audio/20251117/vaani/item_3_vaani.wav",
+      "priority_score": 0.324,
       "trend_score": 0.06
     },
     {
@@ -41,17 +41,17 @@
       "script": "Trump calls on House Republicans to vote to release Epstein files. \"We have nothing to hide,\" the US president writes after previously resisting publishing the documents.",
       "tone": "calm",
       "language": "en",
-      "audio_path": "data\\audio\\20251117\\dev\\item_1_dev.wav",
-      "priority_score": 0.4424,
+      "audio_path": "data/audio/20251117/vaani/item_1_vaani.wav",
+      "priority_score": 0.2537,
       "trend_score": 0.06
     },
     {
-      "id": "https://www.bbc.com/news/articles/c0jd0v8dvpwo#0",
-      "script": "Communist and far-right candidates head to Chile presidential run-off. The Communist Party's Jeanette Jara will face far-right candidate José Antonio Kast in the second round of voting in December.",
+      "id": "https://www.bbc.com/news/articles/clyk0nd1nq6o#1",
+      "script": "Man arrested over deadly Delhi car bomb attack. The man is accused of being an accomplice to the perpetrator of the blast, which killed eight people and wounded 20 others.",
       "tone": "calm",
       "language": "en",
-      "audio_path": "data\\audio\\20251117\\dev\\item_4_dev.wav",
-      "priority_score": 0.4133,
+      "audio_path": "data/audio/20251117/vaani/item_10_vaani.wav",
+      "priority_score": 0.244,
       "trend_score": 0.06
     },
     {
@@ -59,8 +59,17 @@
       "script": "Two US marines implicated in killing family in notorious Iraq war shooting, expert tells BBC. New evidence raises doubts about the longest US war crimes investigation of the Iraq war and how US forces are held to account.",
       "tone": "calm",
       "language": "en",
-      "audio_path": "data\\audio\\20251117\\dev\\item_2_dev.wav",
-      "priority_score": 0.4104,
+      "audio_path": "data/audio/20251117/vaani/item_2_vaani.wav",
+      "priority_score": 0.244,
+      "trend_score": 0.06
+    },
+    {
+      "id": "https://www.bbc.com/news/articles/c0jd0v8dvpwo#0",
+      "script": "Communist and far-right candidates head to Chile presidential run-off. The Communist Party's Jeanette Jara will face far-right candidate José Antonio Kast in the second round of voting in December.",
+      "tone": "calm",
+      "language": "en",
+      "audio_path": "data/audio/20251117/vaani/item_4_vaani.wav",
+      "priority_score": 0.244,
       "trend_score": 0.06
     },
     {
@@ -68,17 +77,8 @@
       "script": "Hackers steal maternity ward CCTV videos in India cybercrime racket. Police say that dozens of videos of pregnant women undergoing medical check-ups were sold on the internet.",
       "tone": "calm",
       "language": "en",
-      "audio_path": "data\\audio\\20251117\\dev\\item_7_dev.wav",
-      "priority_score": 0.4092,
-      "trend_score": 0.06
-    },
-    {
-      "id": "https://www.bbc.com/news/articles/cqx3n4r2g04o#1",
-      "script": "Federal agents launch immigration crackdown in city of Charlotte. Operation \"Charlotte's Web\" is part of Donald Trump’s attempt to deliver \"the largest deportation programme\" in US history.",
-      "tone": "calm",
-      "language": "en",
-      "audio_path": "data\\audio\\20251117\\dev\\item_9_dev.wav",
-      "priority_score": 0.3849,
+      "audio_path": "data/audio/20251117/dev/item_7_dev.wav",
+      "priority_score": 0.244,
       "trend_score": 0.06
     }
   ]
