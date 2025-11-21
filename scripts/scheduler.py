@@ -4,24 +4,38 @@ import json
 import time
 import subprocess
 import datetime as dt
+import logging
+from logging.handlers import RotatingFileHandler
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PY = sys.executable
 
+def _init_logging():
+    app_path = os.path.join(ROOT, "logs", "scheduler.log")
+    err_path = os.path.join(ROOT, "logs", "errors.log")
+    os.makedirs(os.path.dirname(app_path), exist_ok=True)
+    fh = RotatingFileHandler(app_path, maxBytes=1024*1024, backupCount=3)
+    eh = RotatingFileHandler(err_path, maxBytes=1024*1024, backupCount=3)
+    logging.basicConfig(level=logging.INFO, handlers=[fh])
+    elog = logging.getLogger("errors")
+    elog.setLevel(logging.ERROR)
+    elog.addHandler(eh)
+
 def log(msg):
-    path = os.path.join(ROOT, "logs", "scheduler.log")
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "a", encoding="utf-8") as f:
-        f.write(f"{dt.datetime.utcnow().isoformat()} {msg}\n")
+    logging.getLogger().info(msg)
 
 def run(cmd):
     try:
         log(f"RUN {cmd}")
         r = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True)
-        log(f"EXIT {r.returncode} STDOUT={r.stdout.strip()} STDERR={r.stderr.strip()}")
+        msg = f"EXIT {r.returncode} STDOUT={r.stdout.strip()} STDERR={r.stderr.strip()}"
+        if r.returncode != 0:
+            logging.getLogger("errors").error(msg)
+        else:
+            log(msg)
         return r.returncode == 0
     except Exception as e:
-        log(f"ERROR {cmd} {e}")
+        logging.getLogger("errors").error(f"ERROR {cmd} {e}")
         return False
 
 def pipeline(avatars):
@@ -43,6 +57,7 @@ def interval_seconds(name):
     return 3600
 
 def main():
+    _init_logging()
     mode = os.environ.get("SCHED_MODE", "once")
     interval = os.environ.get("SCHED_INTERVAL", "hourly")
     avatars = (os.environ.get("SCHED_AVATARS", "vaani").split(","))

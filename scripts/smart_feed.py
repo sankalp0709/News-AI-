@@ -64,6 +64,10 @@ def rank(items):
         y = dict(x)
         y["trend_score"] = round(tscores.get(x.get("category") or "general", 0.0), 4)
         y["priority_score"] = s
+        if not y.get("script"):
+            y["script"] = y.get("summary_medium") or y.get("summary_short") or y.get("title")
+        if y.get("rl_reward_score") is None:
+            y["rl_reward_score"] = y.get("reward_score", 0.0)
         if y.get("audio_path"):
             y["audio_path"] = normalize_path(y.get("audio_path"))
         ranked.append(y)

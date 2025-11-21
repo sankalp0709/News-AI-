@@ -51,12 +51,14 @@ def process_item(it):
         "title": title,
         "summary_short": s_short,
         "summary_medium": s_med,
+        "script": s_med,
         "category": cat,
         "language": lang,
         "polarity": pol,
         "confidence": conf,
         "confidence_score": conf,
         "reward_score": 0.0,
+        "rl_reward_score": 0.0,
         "tone": tone,
         "timestamp": ts
     }

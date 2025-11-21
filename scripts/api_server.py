@@ -1,6 +1,8 @@
 import os
 import sys
 import json
+import logging
+from logging.handlers import RotatingFileHandler
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from agents.rl_feedback import compute_reward, log_event
@@ -34,7 +36,25 @@ class ApiHandler(BaseHTTPRequestHandler):
                 with open(p, "r", encoding="utf-8") as f:
                     data = json.load(f)
                 return self._send(200, data)
-            except Exception:
+            except Exception as e:
+                logging.getLogger("errors").error("/feed failure: %s", str(e))
+                return self._send(404, {"error": "not_found"})
+        if self.path == "/processed/sample":
+            try:
+                p = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "exports", "weekly_report.json")
+                with open(p, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                items = data.get("items", [])
+                if not items:
+                    return self._send(404, {"error": "no_items"})
+                it = dict(items[0])
+                # ensure required fields
+                it["script"] = it.get("script") or it.get("summary_medium") or it.get("summary_short") or it.get("title")
+                if it.get("rl_reward_score") is None:
+                    it["rl_reward_score"] = it.get("reward_score", 0.0)
+                return self._send(200, it)
+            except Exception as e:
+                logging.getLogger("errors").error("/processed/sample failure: %s", str(e))
                 return self._send(404, {"error": "not_found"})
         return self._send(404, {"error": "not_found"})
 
@@ -76,8 +96,25 @@ class ApiHandler(BaseHTTPRequestHandler):
         return self._send(404, {"error": "not_found"})
 
 def main():
+    # logging setup
+    os.makedirs(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "logs"), exist_ok=True)
+    app_log = RotatingFileHandler(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "logs", "app.log"), maxBytes=512000, backupCount=3)
+    err_log = RotatingFileHandler(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "logs", "errors.log"), maxBytes=512000, backupCount=3)
+    logging.basicConfig(level=logging.INFO, handlers=[app_log])
+    elogger = logging.getLogger("errors")
+    elogger.setLevel(logging.ERROR)
+    elogger.addHandler(err_log)
+
     host = os.environ.get("API_HOST", "127.0.0.1")
-    port = int(os.environ.get("API_PORT", "8000"))
+    env_port = int(os.environ.get("API_PORT", "8000"))
+    # CLI override
+    port = env_port
+    for i, a in enumerate(sys.argv):
+        if a == "--port" and i+1 < len(sys.argv):
+            try:
+                port = int(sys.argv[i+1])
+            except Exception:
+                pass
     server = ThreadingHTTPServer((host, port), ApiHandler)
     print(f"API server running at http://{host}:{port}/")
     try:
