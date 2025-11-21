@@ -29,14 +29,26 @@ def _bins(items, minutes=None, window=None):
 def _velocity(bins):
     if len(bins) < 2:
         return 0.0
+    alpha = float(os.environ.get("TREND_SMOOTH_ALPHA", "0.6"))
     last = bins[0]
     prev = bins[1]
-    denom = max(1, sum(bins))
-    v = (last - prev) / float(denom)
+    decayed = 0.0
+    w = 1.0
+    for i, b in enumerate(bins):
+        decayed += b * w
+        w *= alpha
+    denom = max(1.0, decayed)
+    v = (last - prev) / denom
     return max(0.0, min(1.0, v*3.0))
 
 def _density(bins):
-    total = max(1, sum(bins))
+    alpha = float(os.environ.get("TREND_SMOOTH_ALPHA", "0.6"))
+    decayed_total = 0.0
+    w = 1.0
+    for b in bins:
+        decayed_total += b * w
+        w *= alpha
+    total = max(1.0, decayed_total)
     return max(0.0, min(1.0, bins[0]/float(total)))
 
 def score_category(items):

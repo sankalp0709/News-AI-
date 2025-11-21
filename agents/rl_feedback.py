@@ -26,7 +26,12 @@ def compute_reward(signals, weights=None):
     r = 0.0
     for k, val in s.items():
         if k in w:
-            r += (w[k] * (1 if bool(val) else 0))
+            try:
+                v = float(val)
+                v = max(0.0, min(1.0, v))
+            except Exception:
+                v = 1.0 if bool(val) else 0.0
+            r += (w[k] * v)
     return round(max(-1.0, min(1.0, r)), 4)
 
 def log_event(event):
