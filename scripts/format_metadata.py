@@ -55,6 +55,8 @@ def process_item(it):
         "language": lang,
         "polarity": pol,
         "confidence": conf,
+        "confidence_score": conf,
+        "reward_score": 0.0,
         "tone": tone,
         "timestamp": ts
     }
@@ -81,7 +83,7 @@ def validate(obj):
     if obj.get("polarity") not in pols:
         return False
     try:
-        c = float(obj.get("confidence"))
+        c = float(obj.get("confidence" if obj.get("confidence") is not None else obj.get("confidence_score", 0.5)))
         if not (0.0 <= c <= 1.0):
             return False
     except Exception:

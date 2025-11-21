@@ -48,7 +48,10 @@ def priority(item, trend_scores):
     c = item.get("category") or "general"
     trend = float(trend_scores.get(c, 0.0))
     polw = float(polarity_weight(item.get("polarity")))
-    conf = float(item.get("confidence", 0.5)) if item.get("confidence") is not None else 0.5
+    cval = item.get("confidence_score")
+    if cval is None:
+        cval = item.get("confidence")
+    conf = float(cval) if cval is not None else 0.5
     rec = float(recency_score(item.get("timestamp")))
     score = 0.4*trend + 0.2*polw + 0.2*conf + 0.2*rec
     return round(min(1.0, max(0.0, score)), 4)

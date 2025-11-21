@@ -4,7 +4,7 @@ import json
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from agents.rl_feedback import compute_reward, log_event
-from agents.automator import decide, requeue_item
+from agents.automator import decide, requeue_item, set_reward, set_skip, set_demote
 
 class ApiHandler(BaseHTTPRequestHandler):
     def _send(self, code, obj):
@@ -12,8 +12,31 @@ class ApiHandler(BaseHTTPRequestHandler):
         self.send_response(code)
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(data)))
+        cors = os.environ.get("API_CORS_ORIGIN", "*")
+        self.send_header("Access-Control-Allow-Origin", cors)
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.end_headers()
         self.wfile.write(data)
+
+    def do_OPTIONS(self):
+        self._send(200, {"ok": True})
+
+    def do_GET(self):
+        if self.path == "/health":
+            return self._send(200, {"status": "ok"})
+        if self.path == "/version":
+            v = os.environ.get("API_VERSION", "v0.2")
+            return self._send(200, {"version": v})
+        if self.path == "/feed":
+            try:
+                p = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "exports", "weekly_report.json")
+                with open(p, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                return self._send(200, data)
+            except Exception:
+                return self._send(404, {"error": "not_found"})
+        return self._send(404, {"error": "not_found"})
 
     def do_POST(self):
         try:
@@ -30,10 +53,18 @@ class ApiHandler(BaseHTTPRequestHandler):
             reward = compute_reward(signals)
             action = decide(item, reward)
             log_event({"type": "feedback", "id": item_id, "signals": signals, "reward": reward, "action": action})
+            if item_id:
+                set_reward(item_id, reward)
             if action == "requeue" and item_id:
+                requeued = requeue_item(item_id)
+            elif action == "queue" and item_id:
                 requeued = requeue_item(item_id)
             else:
                 requeued = False
+            if action == "skip" and item_id:
+                set_skip(item_id)
+            if action == "escalate" and item_id:
+                set_demote(item_id)
             return self._send(200, {"id": item_id, "reward": reward, "action": action, "requeued": requeued})
 
         if self.path == "/requeue":
