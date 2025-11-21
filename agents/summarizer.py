@@ -16,8 +16,8 @@ def _fallback_medium(text):
     return " ".join(s[:4])[:800]
 
 def _uniguru(text):
-    url = os.environ.get("https://complete-uniguru.onrender.com")
-    key = os.environ.get("uniguru-dev-key-2025")
+    url = os.environ.get("UNIGURU_SUMMARY_URL")
+    key = os.environ.get("UNIGURU_API_KEY")
     if not url:
         return None
     try:

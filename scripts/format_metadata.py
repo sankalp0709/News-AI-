@@ -54,6 +54,7 @@ def process_item(it):
         "category": cat,
         "language": lang,
         "polarity": pol,
+        "confidence": conf,
         "tone": tone,
         "timestamp": ts
     }
@@ -78,6 +79,12 @@ def validate(obj):
     if not ok_str(obj.get("language"), 2):
         return False
     if obj.get("polarity") not in pols:
+        return False
+    try:
+        c = float(obj.get("confidence"))
+        if not (0.0 <= c <= 1.0):
+            return False
+    except Exception:
         return False
     if obj.get("tone") not in tones:
         return False

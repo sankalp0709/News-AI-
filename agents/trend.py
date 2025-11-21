@@ -1,3 +1,4 @@
+import os
 import datetime as dt
 from dateutil import parser as dparser
 
@@ -14,12 +15,14 @@ def _bucket(ts, ref, minutes):
     delta = ref - ts
     return max(0, int(delta.total_seconds() // (minutes*60)))
 
-def _bins(items, minutes=120, window=6):
+def _bins(items, minutes=None, window=None):
+    m = int(os.environ.get("TREND_BIN_MINUTES", "120")) if minutes is None else int(minutes)
+    w = int(os.environ.get("TREND_WINDOW", "6")) if window is None else int(window)
     ref = max((_ts(x.get("timestamp")) for x in items), default=dt.datetime.utcnow())
-    bins = [0]*window
+    bins = [0]*w
     for x in items:
-        b = _bucket(_ts(x.get("timestamp")), ref, minutes)
-        if b < window:
+        b = _bucket(_ts(x.get("timestamp")), ref, m)
+        if b < w:
             bins[b] += 1
     return bins
 
