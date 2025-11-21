@@ -1,0 +1,11 @@
+{
+  "ts": "2025-11-21T09:40:16.559090",
+  "steps": {
+    "ingest": true,
+    "format_metadata": true,
+    "audio": true,
+    "feed": true
+  },
+  "feed_item_count": 11,
+  "feedback_status": 200
+}

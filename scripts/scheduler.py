@@ -6,6 +6,7 @@ import subprocess
 import datetime as dt
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PY = sys.executable
 
 def log(msg):
     path = os.path.join(ROOT, "logs", "scheduler.log")
@@ -25,11 +26,11 @@ def run(cmd):
 
 def pipeline(avatars):
     ok = True
-    ok &= run(["python", os.path.join(ROOT, "scripts", "run_ingest.py")])
-    ok &= run(["python", os.path.join(ROOT, "scripts", "format_metadata.py")])
+    ok &= run([PY, os.path.join(ROOT, "scripts", "run_ingest.py")])
+    ok &= run([PY, os.path.join(ROOT, "scripts", "format_metadata.py")])
     for a in avatars:
-        ok &= run(["python", os.path.join(ROOT, "scripts", "generate_audio.py"), "--avatar", a, "--voice", "default", "--limit", "10"])
-    ok &= run(["python", os.path.join(ROOT, "scripts", "smart_feed.py")])
+        ok &= run([PY, os.path.join(ROOT, "scripts", "generate_audio.py"), "--avatar", a, "--voice", "default", "--limit", "10"])
+    ok &= run([PY, os.path.join(ROOT, "scripts", "smart_feed.py")])
     return ok
 
 def interval_seconds(name):
