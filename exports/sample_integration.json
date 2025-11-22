@@ -1,0 +1,85 @@
+{
+  "items": [
+    {
+      "id": "t999",
+      "script": "b",
+      "tone": "calm",
+      "language": "en",
+      "audio_path": null,
+      "priority_score": 0.7821,
+      "trend_score": 0.9053
+    },
+    {
+      "id": "https://www.bbc.com/news/articles/cj4qx1lenvjo#0",
+      "script": "High-profile Republican Marjorie Taylor Greene to quit Congress after Trump feud. Her feud with the president erupted amid her relentless calls to release files related to paedophile Jeffrey Epstein.",
+      "tone": "calm",
+      "language": "en",
+      "audio_path": "data/audio/20251122/vaani/item_3_vaani.wav",
+      "priority_score": 0.7373,
+      "trend_score": 0.9053
+    },
+    {
+      "id": "https://www.bbc.com/news/articles/cy5g4r9l4dlo#0",
+      "script": "Zelensky warns Ukraine risks losing US support over White House peace plan. Vladimir Putin says the plan could be the \"basis\" for peace but warns Russia is prepared to fight on.",
+      "tone": "calm",
+      "language": "en",
+      "audio_path": "data/audio/20251122/vaani/item_1_vaani.wav",
+      "priority_score": 0.7369,
+      "trend_score": 1.0
+    },
+    {
+      "id": "https://www.bbc.com/news/articles/cvgqd42gl0qo#0",
+      "script": "Five takeaways from Trump and Mamdani's surprisingly cordial meeting. It was billed as potentially the political showdown of the year. Instead, both men gave one another praise.",
+      "tone": "calm",
+      "language": "en",
+      "audio_path": null,
+      "priority_score": 0.7367,
+      "trend_score": 0.9053
+    },
+    {
+      "id": "https://www.bbc.com/news/articles/c78z8n3kvnro#0",
+      "script": "India's blind women cricketers chase history at first T20 World Cup. Most players come from underprivileged, rural backgrounds and learned the sport in the last few years.",
+      "tone": "calm",
+      "language": "en",
+      "audio_path": null,
+      "priority_score": 0.7286,
+      "trend_score": 0.9053
+    },
+    {
+      "id": "https://www.bbc.com/news/articles/c20508y7w5yo#0",
+      "script": "Will Trump's no-show eclipse South Africa's G20 moment?. The host nation's goal of advocating for developing nations may be overshadowed by the absence of the US president.",
+      "tone": "calm",
+      "language": "en",
+      "audio_path": "data/audio/20251122/vaani/item_4_vaani.wav",
+      "priority_score": 0.7204,
+      "trend_score": 0.9053
+    },
+    {
+      "id": "https://www.bbc.com/news/articles/cgqlqjz30zxo#0",
+      "script": "Family of missing Colombian seek answers after US strike on alleged drug boat. Lizbeth Perez's uncle has not been seen since a boat was hit in international waters in September.",
+      "tone": "calm",
+      "language": "en",
+      "audio_path": null,
+      "priority_score": 0.7115,
+      "trend_score": 0.9053
+    },
+    {
+      "id": "https://www.bbc.com/news/articles/cz68x1n5qd6o#1",
+      "script": "Grizzly bear on loose after attacking school group in Canada, injuring 11. A male teacher \"got the whole brunt\" of the attack and some children were hit with bear spray.",
+      "tone": "calm",
+      "language": "en",
+      "audio_path": null,
+      "priority_score": 0.7076,
+      "trend_score": 0.9053
+    },
+    {
+      "id": "https://www.bbc.com/news/articles/c5y9k0mrm2ro#0",
+      "script": "Steve Rosenberg: Putin uncompromising as leaked plan reaches Moscow. Russia and Ukraine may be about to enter a period of intense diplomacy, writes the BBC's Russia editor.",
+      "tone": "calm",
+      "language": "en",
+      "audio_path": "data/audio/20251122/vaani/item_2_vaani.wav",
+      "priority_score": 0.6963,
+      "trend_score": 0.9053
+    }
+  ]
+}

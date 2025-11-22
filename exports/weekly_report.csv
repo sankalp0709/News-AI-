@@ -1,0 +1,12 @@
+id,title,category,language,polarity,tone,trend_score,priority_score,timestamp
+t999,Test,general,en,neutral,calm,0.9053,0.7821,2025-11-22T05:22:02.053245
+https://www.bbc.com/news/articles/cj4qx1lenvjo#0,High-profile Republican Marjorie Taylor Greene to quit Congress after Trump feud,general,en,neutral,calm,0.9053,0.7373,2025-11-22T04:12:35+00:00
+https://www.bbc.com/news/articles/cy5g4r9l4dlo#0,Zelensky warns Ukraine risks losing US support over White House peace plan,technology,en,negative,calm,1.0,0.7369,2025-11-21T23:49:57+00:00
+https://www.bbc.com/news/articles/cvgqd42gl0qo#0,Five takeaways from Trump and Mamdani's surprisingly cordial meeting,general,en,neutral,calm,0.9053,0.7367,2025-11-22T04:04:18+00:00
+https://www.bbc.com/news/articles/c78z8n3kvnro#0,India's blind women cricketers chase history at first T20 World Cup,general,en,neutral,calm,0.9053,0.7286,2025-11-22T02:07:19+00:00
+https://www.bbc.com/news/articles/c20508y7w5yo#0,Will Trump's no-show eclipse South Africa's G20 moment?,general,en,neutral,calm,0.9053,0.7204,2025-11-22T00:09:48+00:00
+https://www.bbc.com/news/articles/cgqlqjz30zxo#0,Family of missing Colombian seek answers after US strike on alleged drug boat,general,en,neutral,calm,0.9053,0.7115,2025-11-21T22:01:24+00:00
+https://www.bbc.com/news/articles/cz68x1n5qd6o#1,Grizzly bear on loose after attacking school group in Canada  injuring 11,general,en,neutral,calm,0.9053,0.7076,2025-11-21T21:05:30+00:00
+https://www.bbc.com/news/articles/c5y9k0mrm2ro#0,Steve Rosenberg: Putin uncompromising as leaked plan reaches Moscow,general,en,neutral,calm,0.9053,0.6963,2025-11-21T18:21:53+00:00
+https://www.bbc.com/news/articles/c7810w37vwdo#1,Tracking build-up of US military planes and warships near Venezuela,general,en,neutral,calm,0.9053,0.6889,2025-11-21T16:35:12+00:00
+https://www.bbc.com/news/articles/cvgke7e2jx8o#1,At least five killed in Bangladesh earthquake,general,en,neutral,calm,0.9053,0.6871,2025-11-21T16:10:07+00:00
