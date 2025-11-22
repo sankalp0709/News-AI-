@@ -97,7 +97,12 @@ def requeue_item(item_id):
         return False
 
 def set_reward(item_id, reward):
-    return _modify_item(item_id, lambda o: {**o, "reward_score": float(reward)})
+    def mutate(o):
+        r = float(reward)
+        o["reward_score"] = r
+        o["rl_reward_score"] = r
+        return o
+    return _modify_item(item_id, mutate)
 
 def set_skip(item_id):
     return _modify_item(item_id, lambda o: {**o, "skip": True})
