@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Insight Sample</title>
+<style>
+body{font-family:system-ui,Arial;margin:20px;color:#111}
+.row{display:flex;gap:16px;align-items:center}
+.pill{padding:4px 8px;border-radius:12px;background:#eee}
+.score{width:160px;height:10px;background:#eee;border-radius:6px;overflow:hidden}
+.bar{height:10px;background:#3b82f6}
+</style>
+</head>
+<body>
+<h1>Insight Sample</h1>
+<div id="container"></div>
+<script>
+async function load(){
+  const r = await fetch('/processed/sample');
+  if(!r.ok){document.getElementById('container').textContent='No sample';return}
+  const x = await r.json();
+  const c = document.getElementById('container');
+  const trend = Math.round((Number(x.trend_score||0))*100);
+  const prio = Math.round((Number(x.priority_score||0))*100);
+  const conf = Math.round((Number(x.confidence_score||0))*100);
+  const rl = Number(x.rl_reward_score||0);
+  const audio = '/audio?id='+encodeURIComponent(x.id);
+  c.innerHTML = `
+    <h2>${x.title||''}</h2>
+    <p>${x.script||''}</p>
+    <div class="row">
+      <span class="pill">tone: ${x.tone||''}</span>
+      <span class="pill">confidence: ${conf}%</span>
+      <span class="pill">RL: ${rl}</span>
+    </div>
+    <div class="row">
+      <div>trend</div>
+      <div class="score"><div class="bar" style="width:${trend}%"></div></div>
+      <div>${trend}%</div>
+    </div>
+    <div class="row">
+      <div>priority</div>
+      <div class="score"><div class="bar" style="width:${prio}%"></div></div>
+      <div>${prio}%</div>
+    </div>
+    <audio controls src="${audio}"></audio>
+  `;
+}
+load();
+</script>
+</body>
+</html>

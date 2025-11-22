@@ -36,6 +36,24 @@
   - `audio_path`: string
   - `priority_score`: number
   - `trend_score`: number
+  - `confidence_score`: number
+  - `rl_reward_score`: number
+
+### Sample Item JSON
+
+```json
+{
+  "id": "item_123",
+  "script": "AI models transform industry; automation accelerates insights.",
+  "tone": "calm",
+  "language": "en",
+  "audio_path": "data/audio/20251122/vaani/item_1_vaani.wav",
+  "confidence_score": 0.87,
+  "priority_score": 0.72,
+  "trend_score": 0.64,
+  "rl_reward_score": 0.30
+}
+```
 
 ## Exports
 
