@@ -1,0 +1,15 @@
+{
+  "ingest_rc": 0,
+  "format_rc": 0,
+  "audio_rc": 0,
+  "rank_rc": 0,
+  "feedback_status": 200,
+  "feedback_body": {
+    "id": "https://www.bbc.com/news/articles/cde6yld78d6o#0",
+    "reward": 0.6,
+    "action": "queue",
+    "requeued": false,
+    "queued": true,
+    "demoted": false
+  }
+}
