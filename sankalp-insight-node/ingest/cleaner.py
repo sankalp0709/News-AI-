@@ -1,15 +1,26 @@
 import re
-from bs4 import BeautifulSoup
-from langdetect import detect
+try:
+    from bs4 import BeautifulSoup
+except Exception:
+    BeautifulSoup = None
+try:
+    from langdetect import detect
+except Exception:
+    detect = None
 
 def clean_text(text):
     html = text or ""
-    soup = BeautifulSoup(html, "html.parser")
-    plain = soup.get_text(" ")
+    if BeautifulSoup is None:
+        plain = re.sub(r"<[^>]+>", " ", html)
+    else:
+        soup = BeautifulSoup(html, "html.parser")
+        plain = soup.get_text(" ")
     norm = re.sub(r"\s+", " ", plain).strip()
     return norm
 
 def detect_language(text):
+    if detect is None:
+        return "unknown"
     try:
         return detect(text or "")
     except Exception:

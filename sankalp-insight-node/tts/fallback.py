@@ -1,5 +1,8 @@
 import os
-import pyttsx3
+try:
+    import pyttsx3
+except Exception:
+    pyttsx3 = None
 
 def simplify_text(text):
     t = (text or "").strip()
@@ -8,6 +11,8 @@ def simplify_text(text):
     return t
 
 def synthesize_local(text, voice="default", tone="calm", lang="en", out_path=None):
+    if pyttsx3 is None:
+        return None
     eng = pyttsx3.init()
     rate = eng.getProperty('rate')
     if tone == "urgent":

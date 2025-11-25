@@ -1,7 +1,12 @@
 import time
-import feedparser
+try:
+    import feedparser
+except Exception:
+    feedparser = None
 
 def fetch_rss(url, limit=20):
+    if feedparser is None:
+        return []
     feed = feedparser.parse(url)
     items = []
     for entry in feed.get("entries", [])[:limit]:

@@ -29,6 +29,23 @@ def audio_duration(path):
     except Exception:
         return None
 
+def create_silence_wav(path, seconds=1, rate=16000):
+    try:
+        import wave
+        import struct
+        ensure_dir(os.path.dirname(path))
+        frames = int(seconds * rate)
+        with wave.open(path, 'wb') as w:
+            w.setnchannels(1)
+            w.setsampwidth(2)
+            w.setframerate(rate)
+            silence = struct.pack('<h', 0)
+            for _ in range(frames):
+                w.writeframesraw(silence)
+        return True
+    except Exception:
+        return False
+
 def normalize_path(p):
     if not p:
         return p
@@ -47,6 +64,10 @@ def synthesize_text(text, voice, tone, lang, out_path):
         if isinstance(res2, str) and os.path.exists(res2):
             ok = True
             status = "fallback"
+    if not ok and out_path:
+        if create_silence_wav(out_path, seconds=1):
+            ok = True
+            status = "silent_fallback"
     return ok, status
 
 def main():
