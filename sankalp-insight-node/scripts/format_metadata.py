@@ -8,6 +8,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from ingest.cleaner import clean_text, detect_language
 from agents.summarizer import summarize_short, summarize_medium
 from agents.sentiment import analyze
+from agents.rl_feedback import append_provenance
 
 def ensure_dir(p):
     os.makedirs(p, exist_ok=True)
@@ -59,6 +60,10 @@ def process_item(it):
         "confidence_score": conf,
         "timestamp": ts
     }
+    try:
+        append_provenance("format", out.get("id"), out)
+    except Exception:
+        pass
     return out
 
 def validate(obj):

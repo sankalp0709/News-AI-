@@ -8,6 +8,7 @@ import argparse
 from dateutil import parser as dparser
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from agents.trend import compute as compute_trend
+from agents.rl_feedback import append_provenance
 
 def ensure_dir(p):
     os.makedirs(p, exist_ok=True)
@@ -63,6 +64,10 @@ def rank(items):
         y["priority_score"] = s
         if y.get("audio_path"):
             y["audio_path"] = normalize_path(y.get("audio_path"))
+        try:
+            append_provenance("rank", y.get("id"), y)
+        except Exception:
+            pass
         ranked.append(y)
     ranked.sort(key=lambda z: z["priority_score"], reverse=True)
     return ranked

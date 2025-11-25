@@ -5,6 +5,7 @@ import datetime as dt
 import streamlit as st
 import pandas as pd
 import altair as alt
+import requests
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
@@ -221,6 +222,10 @@ else:
         st.warning('Staging endpoint not reachable or returned no data.')
     else:
         items = load_weekly_report()
+        if isinstance(sample, dict):
+            if not sample.get('timestamp'):
+                sample['timestamp'] = dt.datetime.utcnow().isoformat()
+            items = list(items) + [sample]
         df = pd.DataFrame(items)
         if 'timestamp' in df.columns:
             try:
