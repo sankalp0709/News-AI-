@@ -37,10 +37,12 @@ def _density(bins):
     return max(0.0, min(1.0, bins[0]/float(total)))
 
 def score_category(items):
-    b = _bins(items)
-    v = _velocity(b)
-    d = _density(b)
-    s = 0.7*v + 0.3*d
+    b_short = _bins(items, minutes=60, window=8)
+    b_long = _bins(items, minutes=240, window=8)
+    v_short = _velocity(b_short)
+    d_short = _density(b_short)
+    v_long = _velocity(b_long)
+    s = 0.5*v_short + 0.2*d_short + 0.3*v_long
     return max(0.0, min(1.0, s))
 
 def compute(items):
